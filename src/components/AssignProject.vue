@@ -63,8 +63,8 @@
         >
       </v-row>
     </v-form>
-    <br/>
-   project id  {{ input.project_name }} ,  team id {{ input.supervisor_name }} 
+    <br />
+    project id {{ input.project_name }} , team id {{ input.supervisor_name }}
   </v-container>
 </template>
 
@@ -145,10 +145,7 @@ export default {
         })
         .catch((errors) => {
           if ((errors = "Request failed with status code 401")) {
-            //console.log("1231231232132132");
-            alert(
-              "You are not authorized to view this resource because you are not an admin."
-            );
+            console.log(errors);
           }
           this.$router.push("/").catch(() => {});
         });

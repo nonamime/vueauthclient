@@ -1,16 +1,16 @@
 <template>
   <v-container>
-    <h1 style="padding-top: 100px; padding-bottom: 100px">Register User as Worker</h1>
+    <h1 style="padding-top: 100px; padding-bottom: 100px">
+      Register User as Worker
+    </h1>
     <v-spacer></v-spacer>
     <v-form v-model="valid" v-on:submit="register">
       <v-row>
         <v-col cols="12" sm="10" md="8" lg="6">
           <v-text-field
-            v-model="username"
+            v-model="nickname"
             :rules="workernameRules"
-            name="username"
-            label="User name"
-            item-value="username"
+            label="Nickname"
             autocomplete="off"
             required
           ></v-text-field>
@@ -19,11 +19,11 @@
       <v-row>
         <v-col cols="12" sm="10" md="8" lg="6">
           <v-select
-            v-model="worker_name"
+            v-model="userid"
             :items="workernameOption"
             :rules="workernameRules"
             name="workername"
-            item-value="employeeid"
+            item-value="userid"
             item-text="name"
             label="Display Worker Name"
             persistent-hint
@@ -49,35 +49,35 @@ import router from "../router";
 import axios from "axios";
 export default {
   name: "Register",
+  data: () => ({
+    valid: false,
+    nickname: null,
+    userid: null,
+    workernameOption: [],
+    workernameRules: [
+      (v) => !!v || "At Least 1 Worker is required to be select",
+    ],
+  }),
   methods: {
     register: function (e) {
       e.preventDefault();
-      let username = this.username;
-      let workerid = this.worker_name;
-      if (workerid.length == 0)
-      {
-        workerid = null
-      }
-      let register = () => {
-        let data = {
-          username: username,
-          workerid: workerid,
-        };
-        axios
-          .post("/api/registeremployee", data)
-          .then((response) => {
-            console.log("register");
-            router.push("/");
-          })
-          .catch((errors) => {
-            console.log("Cannot Register");
-            console.log(errors);
-            alert("Duplicate User Name");
-          });      
-        console.log(data)
-      };
 
-      register();
+      let data = {
+        nickname: this.nickname,
+        userid: this.userid,
+      };
+      axios
+        .post("/api/registeremployee", data)
+        .then((response) => {
+          console.log("register");
+          router.push("/");
+        })
+        .catch((errors) => {
+          console.log("Cannot Register");
+          console.log(errors);
+          alert("Duplicate User Name");
+        });
+      console.log(data);
     },
     getWorkerData: function () {
       let self = this;
@@ -98,22 +98,6 @@ export default {
   mounted() {
     this.getWorkerData();
   },
-  computed: {
-    passwordConfirmationRule() {
-      return () =>
-        this.password === this.confirmpassword || "Password must match";
-    },
-  },
-  data: () => ({
-    valid: false,
-    username: null,
-    worker_name: [],
-    workernameOption: [],
-    teamnameOption: [],
-    workernameRules: [
-      (v) => !!v || "At Least 1 Worker is required to be select",
-    ],
-  }),
 };
 </script>
 

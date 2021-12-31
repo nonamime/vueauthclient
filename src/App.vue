@@ -1,18 +1,28 @@
 <template>
-
-    <v-app>
-      <Header />
-      <router-view />
-    </v-app>
-
+  <v-app>
+    <Header />
+    <router-view />
+  </v-app>
 </template>
 
 <script>
 import Header from "./components/header.vue";
+import { mapActions } from "vuex";
+
 export default {
   name: "App",
   components: {
     Header,
+  },
+  methods: {
+    ...mapActions(["fetchCurrentUser"]),
+    getUserData: function () {
+     
+    },
+  },
+  async created() {
+    await this.fetchCurrentUser();
+    console.log("app");
   },
 };
 </script>

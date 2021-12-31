@@ -5,6 +5,7 @@ import App from "./App"
 import router from "./router"
 import VueCookies from "vue-cookies"
 import vuetify from './plugins/vuetify'
+import store from './store'
 
 Vue.use(VueCookies)
 
@@ -14,6 +15,7 @@ Vue.config.productionTip = false
 new Vue({
   el: "#app",
   router,
+  store,
   vuetify,
   components: { App },
   template: "<App/>"

@@ -1,9 +1,10 @@
 <template>
-  <div class="pt-16" v-if="user">
+  <div class="pt-16">
     <h2>Dashboard</h2>
-    <p>User Name: {{ user.username }}</p>
-    <p>Display Name: {{ user.displayName }}</p>
-    <p>Role: {{ user.role }}</p>
+    <p>User Name: {{ currentUser.username }}</p>
+    <p>Display Name: {{ currentUser.displayName }}</p>
+    <p>System Role: {{ systemRole }}</p>
+    <p>Team Role: {{ teamRole }}</p>
     <v-form v-on:submit="logout">
       <v-btn class="loginButton" type="submit" value="Logout">Logout</v-btn>
     </v-form>
@@ -12,36 +13,25 @@
 <script>
 import axios from "axios";
 import router from "../router";
+import { mapGetters } from "vuex";
+import { TEAM_ROLE_NAME, SYSTEM_ROLE_NAME } from "../const";
 
 export default {
   name: "Login",
-  components: {
-  },
+  components: {},
   data() {
-    return {
-      user: {
-        username: "",
-        displayName: "",
-        role: "",
-      },
-    };
+    return {};
+  },
+  computed: {
+    ...mapGetters(["currentUser"]),
+    systemRole() {
+      return SYSTEM_ROLE_NAME[this.currentUser.role];
+    },
+    teamRole() {
+      return TEAM_ROLE_NAME[this.currentUser.teamrole];
+    }
   },
   methods: {
-    getUserData: function () {
-      let self = this;
-      axios
-        .get("/api/user")
-        .then((response) => {
-          self.$set(this, "user", response.data.user);
-        })
-        .catch((errors) => {
-          if ((errors = "Request failed with status code 401")) {
-            // alert("You are not authorized to view this resource because you are not an admin.");
-          }
-
-          this.$router.push("/").catch(() => {});
-        });
-    },
     logout: function () {
       let self = this;
       axios
@@ -49,7 +39,7 @@ export default {
         .then((response) => {
           console.log(response);
           self.$set(this, "user", response.data.user);
-          console.log("logout")
+          console.log("logout");
           //this.$router.push("/").catch(() => {});
           router.push("/");
         })
@@ -58,8 +48,6 @@ export default {
         });
     },
   },
-  mounted() {
-    this.getUserData();
-  },
+  mounted() {},
 };
 </script>

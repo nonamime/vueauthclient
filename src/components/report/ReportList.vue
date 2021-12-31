@@ -1,29 +1,38 @@
 <template>
-  <v-card>
-    <table v-for="site in sites" :key="site" id="customers">
+  <v-card class="pa-4">
+    <table id="customers">
+      <!-- <tr>
+        <th style="background-color: black" colspan="3">
+          {{ site.projectname }}
+        </th>
+      </tr> -->
       <tr>
-        <th style="background-color: black" colspan="3">{{ site.projectname }}</th>
-      </tr>
-      <tr>
+        <th>Site</th>
         <th>Worker Name</th>
         <th>Worker In Time</th>
         <th>Worker Out Time</th>
       </tr>
-      <tr v-for="site in sites" :key="site">
+
+      <tr v-for="(team, index) in sites" :key="index">
         <td>
-          {{site.employeename}}
+          {{ team.projectname }}
         </td>
-        <td >
-          {{site.datein + " " +site.clockin}}
+        <td>
+          {{ team.employeename }}
         </td>
-        <td >
-          {{site.dateout + " " +site.clockout}}
+        <td v-if="team.clockin">
+          {{ team.datein + " " + team.clockin }}
         </td>
+        <td v-else>Not set</td>
+
+        <td v-if="team.clockout">
+          {{ team.dateout + " " + team.clockout }}
+        </td>
+        <td v-else>Not set</td>
       </tr>
       <br />
     </table>
-    {{ sites }}
-    <v-btn class="button">Print the entire page</v-btn>
+    <v-btn class="button my-4">Print the entire page</v-btn>
   </v-card>
 </template>
 
@@ -43,7 +52,6 @@ export default {
         .then((response) => {
           for (let i = 0; i < response.data.length; i++) {
             self.sites.push(response.data[i]);
-
           }
         })
         .catch((errors) => {

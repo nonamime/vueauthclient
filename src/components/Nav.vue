@@ -22,11 +22,10 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar-title class="pt-3" style="text-align: right">
-      <router-link to="/dashboard">
+      <router-link :to="homeLink">
         <img height="68" src="../assets/alricLogo.svg" />
       </router-link>
     </v-toolbar-title>
-
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="hidden-md-and-down">
@@ -35,12 +34,11 @@
       </v-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
-
     <div class="pr-4">
-      {{ user.username }}
+      {{ currentUser.username }}
     </div>
 
-    <v-form v-if="user.username" v-on:submit="logout">
+    <v-form v-if="currentUser.username" v-on:submit="logout">
       <v-btn class="loginButton" type="submit" value="Logout">Logout</v-btn>
     </v-form>
   </v-app-bar>
@@ -49,6 +47,8 @@
 <script>
 import axios from "axios";
 import router from "../router";
+import { mapGetters } from "vuex";
+
 export default {
   data: function () {
     return {
@@ -58,9 +58,10 @@ export default {
         username: "",
         displayName: "",
       },
-      menuItems: [],
+      // menuItems: [],
       adminMenuItems: [
         { path: "/register", title: "New User" },
+        { path: "/registerworker", title: "Set User As Employee" },
         { path: "/registerproject", title: "New Project" },
         { path: "/createteam", title: "New Team" },
         { path: "/assignsupervisor", title: "Set Team Supervisor" },
@@ -70,45 +71,28 @@ export default {
       supervisorMenuItems: [{ path: "/supervisor", title: "Supervisor" }],
     };
   },
-  computed: {},
-  methods: {
-    getUserData: function () {
-      let self = this;
-      axios
-        .get("/api/login")
-        .then((response) => {
-          self.$set(this, "user", response.data.user);
-        })
-        .catch((errors) => {
-          if ((errors = "Request failed with status code 401")) {
-            // alert("You are not authorized to view this resource because you are not an admin.");
-          }
-          console.log("in error");
-          this.$router.push("/").catch(() => {});
-        });
-      // axios
-      //   .get("/api/user")
-      //   .then((response) => {
-      //     console.log("this is user ", response.data);
-      //     this.user = { ...response.data.user };
-      //     this.role = response.data.user.role;
-      //     console.log("am i being called", this.role);
-      //     this.show = true;
-      //   })
-      //   .catch((errors) => {
-      //     console.log("error api call", errors);
-      //     // this.$router.push("/").catch(() => {});
-      //   });
-      this.role = this.user.role;
-      if (this.role == "admin") {
-        this.menuItems = [...this.adminMenuItems];
+  computed: {
+    ...mapGetters(["currentUser"]),
+    menuItems() {
+      if (this.currentUser.role == 1) {
+        return this.adminMenuItems;
       }
-      if (this.role == "supervisor") {
-        this.menuItems = [...this.supervisorMenuItems];
+      if (this.currentUser.teamrole == 1) {
+        return this.supervisorMenuItems;
       }
-      console.log("am i being called", this.user);
-      console.log("am i being called", this.role);
+      return [];
     },
+    homeLink() {
+      if (this.currentUser.role == "supervisor") {
+        return '/supervisor';
+      }
+      return '/dashboard';
+    },
+  },
+  watch: {
+    currentUser() {},
+  },
+  methods: {
     logout: function () {
       let self = this;
       axios
@@ -122,10 +106,7 @@ export default {
         });
     },
   },
-  mounted() {
-    this.getUserData();
-    this.menuItems = this.adminMenuItems;
-  },
+  mounted() {},
 };
 </script>
 

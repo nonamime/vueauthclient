@@ -111,10 +111,7 @@ export default {
         })
         .catch((errors) => {
           if ((errors = "Request failed with status code 401")) {
-            //console.log("1231231232132132");
-            alert(
-              "You are not authorized to view this resource because you are not an admin."
-            );
+            console.log(errors);
           }
           this.$router.push("/").catch(() => {});
         });
@@ -132,10 +129,7 @@ export default {
         })
         .catch((errors) => {
           if ((errors = "Request failed with status code 401")) {
-            //console.log("1231231232132132");
-            alert(
-              "You are not authorized to view this resource because you are not an admin."
-            );
+            console.log(errors);
           }
           this.$router.push("/").catch(() => {});
         });
@@ -167,7 +161,7 @@ export default {
       project_name: null,
       supervisor_name: null,
       worker_name: null,
-      team_name:null,
+      team_name: null,
     },
   }),
 };

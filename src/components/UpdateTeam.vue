@@ -228,7 +228,6 @@ export default {
           .sort()
           .filter((val) => !this.compareworkername.includes(val));
         if (array1.length != 0) {
-
           workerid = array1.toString().split(",");
 
           let update = () => {
@@ -313,10 +312,10 @@ export default {
               self.input.teamdescription = response.data[0].description;
               self.teamdescription = response.data[0].description;
               self.teamname = response.data[0].teamname;
-              console.log(response.data)
+              console.log(response.data);
               for (let i = 0; i < response.data.length; i++) {
                 self.input.worker_name.push(response.data[i].employeeid);
-                console.log(self.input.worker_name)
+                console.log(self.input.worker_name);
                 self.supervisornameOption.push(response.data[i]);
               }
               this.compareworkername = self.input.worker_name;
@@ -381,7 +380,7 @@ export default {
       axios
         .get("/api/employeename")
         .then((response) => {
-          console.log(response)
+          console.log(response);
           for (let i = 0; i < response.data.length; i++) {
             self.workernameOption.push(response.data[i]);
           }
@@ -405,9 +404,7 @@ export default {
         })
         .catch((errors) => {
           if ((errors = "Request failed with status code 401")) {
-            alert(
-              "You are not authorized to view this resource because you are not an admin."
-            );
+            console.log(errors);
           }
           this.$router.push("/").catch(() => {});
         });

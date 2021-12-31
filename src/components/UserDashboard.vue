@@ -1,9 +1,9 @@
 <template>
-  <div v-if="user">
+  <div v-if="currentUser">
     <h2>Dashboard</h2>
-    <p>User Name: {{ user.username }}</p>
-    <p>Display Name: {{ user.displayName }}</p>
-    <p>Role: {{ user.role }}</p>
+    <p>User Name: {{ currentUser.username }}</p>
+    <p>Display Name: {{ currentUser.displayName }}</p>
+    <p>Role: {{ currentUser.role }}</p>
     <v-form v-on:submit="logout">
       <v-btn class="loginButton" type="submit" value="Logout">Logout</v-btn>
     </v-form>
@@ -12,40 +12,18 @@
 <script>
 import axios from "axios";
 import router from "../router";
-import Header from "./header.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Login",
-  components: {
-    Header,
-  },
+  components: {},
   data() {
-    return {
-      user: {
-        username: "",
-        displayName: "",
-        role: "",
-      },
-    };
+    return {};
+  },
+  computed: {
+    ...mapGetters(["currentUser"]),
   },
   methods: {
-    getUserData: function () {
-      let self = this;
-      axios
-        .get("/api/user1")
-        .then((response) => {
-          //console.log(response);
-          self.$set(this, "user", response.data.user);
-        })
-        .catch((errors) => {
-          if ((errors = "Request failed with status code 401")) {
-            //console.log("1231231232132132");
-            alert("You are not authorized to view this resource because you are not an user.");
-          }
-          console.log(errors);
-          this.$router.push("/").catch(() => {});
-        });
-    },
     logout: function () {
       let self = this;
       axios
@@ -61,7 +39,10 @@ export default {
     },
   },
   mounted() {
-    this.getUserData();
+    if (!this.currentUser) {
+      this.$router.push("/");
+    }
+    // this.getUserData();
   },
 };
 </script>

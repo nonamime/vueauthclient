@@ -52,9 +52,12 @@
 
 <script>
 import axios from "axios";
+import { mapActions } from "vuex";
+
 export default {
   name: "Login",
   methods: {
+    ...mapActions(["fetchCurrentUser"]),
     login: function (e) {
       e.preventDefault();
       let username = e.target.elements.username.value;
@@ -67,14 +70,14 @@ export default {
       };
       axios
         .post("/api/login", data)
-        .then((response) => {
+        .then(async (response) => {
+          await this.fetchCurrentUser();
           if (response.data.teamrole == 1) {
-            this.$router.push("/supervisor").catch(() => {});
-          } else if (response.data.role == 1) {
-            this.$router.push("/dashboard").catch(() => {});
-          } else if (response.data.role == 0) {
-            this.$router.push("/userdashboard").catch(() => {});
+            //supervisor
+            return this.$router.push("/supervisor").catch(() => {});
           }
+
+          this.$router.push("/dashboard").catch(() => {});
         })
         .catch((errors) => {
           console.log(errors);

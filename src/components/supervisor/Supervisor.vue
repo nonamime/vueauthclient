@@ -1,6 +1,5 @@
 <template>
   <div data-app>
-
     <v-col>
       <h1>Supervisor Page</h1>
       <br />
@@ -13,17 +12,22 @@
 
             <v-col cols="12" sm="6">
               <v-select
-                v-model="projectname"
+                v-model="selectedTeam"
                 :items="selectOption"
                 label="Select"
                 hint="Select Project Site"
                 persistent-hint
                 name="projectsite"
-                item-value="teamid"
-                item-text="projectname"
                 @input="filterteammember"
                 required
-              ></v-select>
+              >
+                <template slot="item" slot-scope="data">
+                  {{ data.item.projectname }} - {{ data.item.teamname }}
+                </template>
+                <template slot="selection" slot-scope="data">
+                  {{ data.item.projectname }} - {{ data.item.teamname }}
+                </template>
+              </v-select>
             </v-col>
 
             <v-col cols="12" sm="6">
@@ -123,7 +127,7 @@
                 v-text="'Display Selected Date & Time'"
               ></v-card-title>
             </v-col>
-            <v-col cols="12" sm="6"> {{ datein }} - {{ timein }} </v-col>
+            <!-- <v-col cols="12" sm="6"> {{ datein }} - {{ timein }} </v-col> -->
           </v-row>
           <v-row align="center">
             <v-col cols="12" sm="6">
@@ -209,7 +213,7 @@
                 v-text="'Display Selected Date & Time'"
               ></v-card-title>
             </v-col>
-            <v-col cols="12" sm="6"> {{ dateout }} - {{ timeout }} </v-col>
+            <!-- <v-col cols="12" sm="6"> {{ dateout }} - {{ timeout }} </v-col> -->
           </v-row>
           <br />
           <v-btn class="loginButton" type="submit" value="Register"
@@ -233,7 +237,7 @@ export default {
 
   data() {
     return {
-      projectname: null,
+      selectedTeam: null,
       projectid: null,
       multiValue: null,
       select: null,
@@ -260,7 +264,7 @@ export default {
       e.preventDefault();
       var workerid = this.worker_name.toString().split(",");
       let data = {
-        teamid: this.projectname,
+        teamid: this.selectedTeam.id,
         projectid: this.projectid,
         workerid: workerid,
         datein: this.datein,
@@ -271,8 +275,6 @@ export default {
       axios
         .post("/api/insertworkertime", data)
         .then((response) => {
-          //console.log("Update Success");
-          //console.log(response);
         })
         .catch((errors) => {
           //console.log("Cannot Update");
@@ -281,45 +283,38 @@ export default {
         });
     },
     getUserData: function () {
-      let self = this;
       axios
-        .get("/api/supervisor")
+        .get("/api/getTeam")
         .then((response) => {
           for (let i = 0; i < response.data.length; i++) {
-            self.selectOption.push(response.data[i]);
+            this.selectOption.push(response.data[i]);
           }
         })
         .catch((errors) => {
           if ((errors = "Request failed with status code 401")) {
             console.log(errors);
-            alert(
-              "You are not authorized to view this resource because you are not an admin."
-            );
           }
         });
     },
     filterteammember: function (e) {
-      let self = this;
-      let teamid = self.projectname;
       let data = {
-        teamid: teamid,
+        teamid: this.selectedTeam.id,
       };
       axios
         .post("/api/filterteamworker", data)
         .then((response) => {
-          self.workernameOption = [];
-          self.worker_name = [];
+          this.workernameOption = [];
+          this.worker_name = [];
           if (response.data.length != 0) {
-            self.projectid = response.data[0].projectid;
+            this.projectid = response.data[0].projectid;
             for (let i = 0; i < response.data.length; i++) {
-              self.workernameOption.push(response.data[i]);
+              this.workernameOption.push(response.data[i]);
             }
           }
         })
         .catch((errors) => {
-          console.log("Cannot Register");
           console.log(errors);
-          alert("Current Worker Name List Error");
+          alert("Fetch Worker Name List Error");
         });
     },
   },

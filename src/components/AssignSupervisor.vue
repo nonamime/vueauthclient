@@ -77,49 +77,20 @@ export default {
       let workerid = e.target.elements.workername.value;
 
       workerid = workerid.split(",");
-      console.log(workerid);
-      console.log(projectid);
-      let register = () => {
-        let data = {
-          projectid: projectid,
-          team: team,
-          workerid: workerid,
-        };
-        axios
-          .post("/api/assignsupervisor", data)
-          .then((response) => {
-            console.log("register");
-            console.log(response);
-          })
-          .catch((errors) => {
-            console.log("Cannot Register");
-            console.log(errors);
-            alert("Duplicate Team Name");
-          });
+
+      let data = {
+        projectid: projectid,
+        team: team,
+        workerid: workerid,
       };
-      register();
+      axios
+        .post("/api/assignsupervisor", data)
+        .then((response) => {})
+        .catch((errors) => {
+          console.log(errors);
+          alert("Duplicate Team Name");
+        });
     },
-    // getProjectData: function () {
-    //   let self = this;
-    //   axios
-    //     .get("/api/teamprojectname")
-    //     .then((response) => {
-    //       for (let i = 0; i < response.data.length; i++) {
-    //         self.projectnameOption.push(
-    //           JSON.parse(JSON.stringify(response.data[i]))
-    //         );
-    //       }
-    //     })
-    //     .catch((errors) => {
-    //       if ((errors = "Request failed with status code 401")) {
-    //         //console.log("1231231232132132");
-    //         alert(
-    //           "You are not authorized to view this resource because you are not an admin."
-    //         );
-    //       }
-    //       this.$router.push("/").catch(() => {});
-    //     });
-    // },
     filtersupervisor: function () {
       let self = this;
       let teamid = self.input.team_name;
@@ -132,14 +103,16 @@ export default {
           .then((response) => {
             self.input.project_name = response.data[0].projectname;
             for (let i = 0; i < response.data.length; i++) {
-              console.log(JSON.parse(JSON.stringify(response.data[i])));
+              // console.log(JSON.parse(JSON.stringify(response.data[i])));
               self.workernameOption.push(
                 JSON.parse(JSON.stringify(response.data[i]))
               );
             }
           })
           .catch((errors) => {
-            alert("No worker found in this team, Please add worker into team at Edit Team page");
+            alert(
+              "No worker found in this team, Please add worker into team at Edit Team page"
+            );
           });
       };
       filtersupervisor();
@@ -157,10 +130,7 @@ export default {
         })
         .catch((errors) => {
           if ((errors = "Request failed with status code 401")) {
-            //console.log("1231231232132132");
-            alert(
-              "You are not authorized to view this resource because you are not an admin."
-            );
+            console.log(errors);
           }
           this.$router.push("/").catch(() => {});
         });
