@@ -62,7 +62,6 @@ export default {
             console.log("register");
             console.log(response);
             alert("Success")
-            window.location.reload();
           })
           .catch((errors) => {
             console.log("Cannot Register");

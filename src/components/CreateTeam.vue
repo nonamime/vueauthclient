@@ -33,16 +33,15 @@
           ></v-select>
         </v-col>
       </v-row>
-
       <v-row>
         <v-col cols="12" sm="10" md="8" lg="6">
           <v-select
-            v-model="input.worker_name"
+            v-model="input.worker_ids"
             :items="workernameOption"
             :rules="workernameRules"
             name="workername"
             item-value="employeeid"
-            item-text="name"
+            item-text="employeename"
             label="Worker Name"
             multiple
             chips
@@ -68,6 +67,32 @@
 import axios from "axios";
 export default {
   name: "Register",
+  data: () => ({
+    valid: false,
+    projectnameOption: [],
+    workernameOption: [],
+    projectlist: [],
+    multiValue: null,
+    supervisorname: null,
+    projectnameRules: [(v) => !!v || "Project is required to be select"],
+    teamnameRules: [(v) => !!v || "Team Name & Description is required"],
+    workernameRules: [
+      (v) => !!v || "At Least 1 Worker is required to be select",
+    ],
+    input: {
+      project_name: null,
+      supervisor_name: null,
+      worker_ids: null,
+      team_name: null,
+    },
+  }),
+  computed: {
+    passwordConfirmationRule() {
+      return () =>
+        this.password === this.confirmpassword || "Password must match";
+    },
+  },
+
   methods: {
     register: (e) => {
       e.preventDefault();
@@ -88,12 +113,11 @@ export default {
           .post("/api/assignproject", data)
           .then((response) => {
             console.log("register");
-            console.log(response);
+            alert("Team created successfully");
           })
           .catch((errors) => {
             console.log("Cannot Register");
             console.log(errors);
-            alert("Duplicate Team Name");
           });
       };
       register();
@@ -119,7 +143,7 @@ export default {
     getWorkerData: function () {
       let self = this;
       axios
-        .get("/api/workername")
+        .get("/api/employeename")
         .then((response) => {
           for (let i = 0; i < response.data.length; i++) {
             self.workernameOption.push(
@@ -139,31 +163,6 @@ export default {
     this.getProjectData();
     this.getWorkerData();
   },
-  computed: {
-    passwordConfirmationRule() {
-      return () =>
-        this.password === this.confirmpassword || "Password must match";
-    },
-  },
-  data: () => ({
-    valid: false,
-    projectnameOption: [],
-    workernameOption: [],
-    projectlist: [],
-    multiValue: null,
-    supervisorname: null,
-    projectnameRules: [(v) => !!v || "Project is required to be select"],
-    teamnameRules: [(v) => !!v || "Team Name & Description is required"],
-    workernameRules: [
-      (v) => !!v || "At Least 1 Worker is required to be select",
-    ],
-    input: {
-      project_name: null,
-      supervisor_name: null,
-      worker_name: null,
-      team_name: null,
-    },
-  }),
 };
 </script>
 

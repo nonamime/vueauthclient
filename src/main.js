@@ -6,8 +6,11 @@ import router from "./router"
 import VueCookies from "vue-cookies"
 import vuetify from './plugins/vuetify'
 import store from './store'
+import titleMixin from './mixin/titleMixin'
 
 Vue.use(VueCookies)
+
+Vue.mixin(titleMixin)
 
 Vue.config.productionTip = false
 

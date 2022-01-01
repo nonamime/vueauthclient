@@ -6,13 +6,7 @@
         <v-col
           ><h2>
             Date :
-            {{
-              date.getUTCDate() +
-              "-" +
-              date.getUTCMonth() +
-              "-" +
-              date.getUTCFullYear()
-            }}
+            {{ dateOfToday }}
           </h2></v-col
         ></v-container
       >
@@ -32,9 +26,17 @@ export default {
     ReportList,
   },
   data() {
-    return {
-      date: new Date(),
-    };
+    return {};
+  },
+  computed: {
+    dateOfToday() {
+      return new Date().toLocaleString("en-SG", {
+        weekday: "short", // long, short, narrow
+        day: "numeric", // numeric, 2-digit
+        year: "numeric", // numeric, 2-digit
+        month: "long", // numeric, 2-digit, long, short, narrow)
+      });
+    },
   },
 };
 </script>

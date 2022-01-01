@@ -234,7 +234,7 @@ export default {
   components: {
     Header,
   },
-
+  title: "Supervisor Time in/out Page",
   data() {
     return {
       selectedTeam: null,

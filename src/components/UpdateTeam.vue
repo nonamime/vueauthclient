@@ -116,8 +116,6 @@ export default {
         e.target.elements.teamname.value !== this.teamname ||
         e.target.elements.teamdescription.value !== this.teamdescription
       ) {
-        console.log(e.target.elements.teamname.value);
-        console.log(this.teamname);
         let updateteamname = () => {
           let data = {
             teamname: e.target.elements.teamname.value,

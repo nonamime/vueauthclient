@@ -69,6 +69,32 @@
 import axios from "axios";
 export default {
   name: "Register",
+  data: () => ({
+    valid: false,
+    projectnameOption: [],
+    teamnameOption: [],
+    projectlist: [],
+    workernameOption: [],
+    multiValue: null,
+    supervisorname: null,
+    projectnameRules: [(v) => !!v || "Project is required to be select"],
+    teamnameRules: [(v) => !!v || "Team Name & Description is required"],
+    workernameRules: [
+      (v) => !!v || "At Least 1 Worker is required to be select",
+    ],
+    input: {
+      project_name: null,
+      supervisor_name: null,
+      worker_name: null,
+      team_name: null,
+    },
+  }),
+  computed: {
+    passwordConfirmationRule() {
+      return () =>
+        this.password === this.confirmpassword || "Password must match";
+    },
+  },
   methods: {
     register: (e) => {
       e.preventDefault();
@@ -92,30 +118,28 @@ export default {
         });
     },
     filtersupervisor: function () {
-      let self = this;
-      let teamid = self.input.team_name;
-      let filtersupervisor = () => {
-        let data = {
-          teamid: teamid,
-        };
-        axios
-          .post("/api/filterteamworker", data)
-          .then((response) => {
-            self.input.project_name = response.data[0].projectname;
-            for (let i = 0; i < response.data.length; i++) {
-              // console.log(JSON.parse(JSON.stringify(response.data[i])));
-              self.workernameOption.push(
-                JSON.parse(JSON.stringify(response.data[i]))
-              );
-            }
-          })
-          .catch((errors) => {
-            alert(
-              "No worker found in this team, Please add worker into team at Edit Team page"
-            );
-          });
+      let teamid = this.input.team_name;
+
+      let data = {
+        teamid: teamid,
       };
-      filtersupervisor();
+      axios
+        .post("/api/filterteamworker", data)
+        .then((response) => {
+          this.input.project_name = response.data[0].projectname;
+          this.workernameOption = [];
+          for (let i = 0; i < response.data.length; i++) {
+            // console.log(JSON.parse(JSON.stringify(response.data[i])));
+            this.workernameOption.push(
+              JSON.parse(JSON.stringify(response.data[i]))
+            );
+          }
+        })
+        .catch((errors) => {
+          alert(
+            "No worker found in this team, Please add worker into team at Edit Team page"
+          );
+        });
     },
     getTeamData: function () {
       let self = this;
@@ -140,32 +164,6 @@ export default {
     //this.getProjectData();
     this.getTeamData();
   },
-  computed: {
-    passwordConfirmationRule() {
-      return () =>
-        this.password === this.confirmpassword || "Password must match";
-    },
-  },
-  data: () => ({
-    valid: false,
-    projectnameOption: [],
-    teamnameOption: [],
-    projectlist: [],
-    workernameOption: [],
-    multiValue: null,
-    supervisorname: null,
-    projectnameRules: [(v) => !!v || "Project is required to be select"],
-    teamnameRules: [(v) => !!v || "Team Name & Description is required"],
-    workernameRules: [
-      (v) => !!v || "At Least 1 Worker is required to be select",
-    ],
-    input: {
-      project_name: null,
-      supervisor_name: null,
-      worker_name: null,
-      team_name: null,
-    },
-  }),
 };
 </script>
 

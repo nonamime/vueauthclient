@@ -11,14 +11,14 @@ import { mapActions } from "vuex";
 
 export default {
   name: "App",
+
+  title: "Foo Page",
   components: {
     Header,
   },
   methods: {
     ...mapActions(["fetchCurrentUser"]),
-    getUserData: function () {
-     
-    },
+    getUserData: function () {},
   },
   async created() {
     await this.fetchCurrentUser();

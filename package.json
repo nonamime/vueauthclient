@@ -1,8 +1,8 @@
 {
-  "name": "vueauthclient",
+  "name": "Alric_Project",
   "version": "1.0.0",
   "private": true,
-  "description": "A Vue.js project",
+  "description": "Alric internal project",
   "author": "wongyongren <wongyongren@hotmail.com>",
   "scripts": {
     "build": "node build/build.js",
