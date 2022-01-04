@@ -113,7 +113,7 @@ export default {
           .post("/api/assignproject", data)
           .then((response) => {
             console.log("register");
-            alert("Team created successfully");
+            alert("Team created successfully.");
           })
           .catch((errors) => {
             console.log("Cannot Register");

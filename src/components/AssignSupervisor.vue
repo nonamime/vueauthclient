@@ -111,7 +111,9 @@ export default {
       };
       axios
         .post("/api/assignsupervisor", data)
-        .then((response) => {})
+        .then((response) => {
+          alert("Assigned supervisor successfully.");
+        })
         .catch((errors) => {
           console.log(errors);
           alert("Duplicate Team Name");

@@ -355,10 +355,10 @@ export default {
           .post("/api/teamsupervisor", data)
           .then((response) => {
             if (response.data.length == 0) {
-              alert(
-                "This Team does not have Supervisor. Will direct to assign Supervisor page to assign Supervisor"
-              );
-              this.$router.push("/assignsupervisor").catch(() => {});
+              // alert(
+              //   "This Team does not have Supervisor. Will direct to assign Supervisor page to assign Supervisor"
+              // );
+              // this.$router.push("/assignsupervisor").catch(() => {});
             }
             for (let i = 0; i < response.data.length; i++) {
               self.input.supervisor_name.push(response.data[i].employeeid);

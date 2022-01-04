@@ -7,7 +7,7 @@ Vue.use(Vuetify)
 
 const opts = {
     icons: {
-        iconfont: 'mdi', // default - only for display purposes
+        iconfont: 'mdiSvg', // default - only for display purposes
     },
 }
 

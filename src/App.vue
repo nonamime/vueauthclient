@@ -12,7 +12,7 @@ import { mapActions } from "vuex";
 export default {
   name: "App",
 
-  title: "Foo Page",
+  title: "Alric Project",
   components: {
     Header,
   },

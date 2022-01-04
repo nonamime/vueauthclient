@@ -1,8 +1,6 @@
 <template>
   <v-container>
-    <h1 style="padding-top: 100px; padding-bottom: 100px">
-      Create Project
-    </h1>
+    <h1 style="padding-top: 100px; padding-bottom: 100px">Create Project</h1>
     <v-spacer></v-spacer>
     <v-form v-model="valid" v-on:submit="register">
       <v-row>
@@ -61,7 +59,7 @@ export default {
           .then((response) => {
             console.log("register");
             console.log(response);
-            alert("Success")
+            alert("Project created successfully.");
           })
           .catch((errors) => {
             console.log("Cannot Register");
@@ -76,12 +74,8 @@ export default {
     valid: false,
     projectname: "",
     projectadddress: "",
-    projectnameRules: [
-      (v) => !!v || "Project Name is required",
-    ],
-    projectadddressRules: [
-      (v) => !!v || "Project Address is required",
-    ],
+    projectnameRules: [(v) => !!v || "Project Name is required"],
+    projectadddressRules: [(v) => !!v || "Project Address is required"],
   }),
 };
 </script>

@@ -7,7 +7,10 @@
         <v-form v-model="checkvalid" v-on:submit="update">
           <v-row align="center">
             <v-col cols="12" sm="6">
-              <v-card-title v-text="'Project Site Name'"></v-card-title>
+              <div class="d-flex align-content-center">
+                <v-icon large color="green darken-2"> mdi-domain </v-icon>
+                <v-card-title v-text="'Project Site Name'"></v-card-title>
+              </div>
             </v-col>
 
             <v-col cols="12" sm="6">
@@ -31,7 +34,10 @@
             </v-col>
 
             <v-col cols="12" sm="6">
-              <v-card-title v-text="'Select Worker'"></v-card-title>
+              <div class="d-flex align-content-center">
+                <v-icon large color="green darken-2"> mdi-account-multiple  </v-icon>
+                <v-card-title v-text="'Select Worker'"></v-card-title>
+              </div>
             </v-col>
 
             <v-col cols="12" sm="6">
@@ -49,7 +55,12 @@
           </v-row>
           <v-row align="center">
             <v-col cols="12" sm="6">
-              <v-card-title v-text="'Select Date & Time'"></v-card-title>
+              <div class="d-flex align-content-center">
+                <v-icon large color="green darken-2"> mdi-account-arrow-right </v-icon>
+                <v-card-title
+                  v-text="'Select Start Time'"
+                ></v-card-title>
+              </div>
             </v-col>
 
             <v-col cols="12" sm="3" md="3">
@@ -65,8 +76,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="datein"
-                    label="Picker in menu"
-                    prepend-icon="mdi-calendar"
+                    label="Select date"
                     readonly
                     v-bind="attrs"
                     v-on="on"
@@ -95,8 +105,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="timein"
-                    label="Picker in dialog"
-                    prepend-icon="mdi-clock-time-four-outline"
+                    label="Select time"
                     readonly
                     v-bind="attrs"
                     v-on="on"
@@ -122,16 +131,15 @@
                 </v-time-picker>
               </v-dialog>
             </v-col>
-            <v-col cols="12" sm="6">
-              <v-card-title
-                v-text="'Display Selected Date & Time'"
-              ></v-card-title>
-            </v-col>
-            <!-- <v-col cols="12" sm="6"> {{ datein }} - {{ timein }} </v-col> -->
           </v-row>
           <v-row align="center">
             <v-col cols="12" sm="6">
-              <v-card-title v-text="'Select Date & Time'"></v-card-title>
+              <div class="d-flex align-content-center">
+                <v-icon large color="green darken-2">
+                  mdi-account-arrow-left
+                </v-icon>
+                <v-card-title v-text="'Select End Time'"></v-card-title>
+              </div>
             </v-col>
 
             <v-col cols="12" sm="3" md="3">
@@ -147,8 +155,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="dateout"
-                    label="Picker in menu"
-                    prepend-icon="mdi-calendar"
+                    label="Select date"
                     readonly
                     v-bind="attrs"
                     v-on="on"
@@ -181,8 +188,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="timeout"
-                    label="Picker in dialog"
-                    prepend-icon="mdi-clock-time-four-outline"
+                    label="Select time"
                     readonly
                     v-bind="attrs"
                     v-on="on"
@@ -208,12 +214,6 @@
                 </v-time-picker>
               </v-dialog>
             </v-col>
-            <v-col cols="12" sm="6">
-              <v-card-title
-                v-text="'Display Selected Date & Time'"
-              ></v-card-title>
-            </v-col>
-            <!-- <v-col cols="12" sm="6"> {{ dateout }} - {{ timeout }} </v-col> -->
           </v-row>
           <br />
           <v-btn class="loginButton" type="submit" value="Register"
@@ -229,6 +229,8 @@
 // @ is an alias to /src
 import Header from "@/components/header.vue";
 import axios from "axios";
+import { mdiAccountArrowRight } from "@mdi/js";
+
 export default {
   name: "Supervisor",
   components: {
@@ -274,8 +276,7 @@ export default {
       };
       axios
         .post("/api/insertworkertime", data)
-        .then((response) => {
-        })
+        .then((response) => {})
         .catch((errors) => {
           //console.log("Cannot Update");
           console.log(errors);

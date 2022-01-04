@@ -8,6 +8,8 @@ import vuetify from './plugins/vuetify'
 import store from './store'
 import titleMixin from './mixin/titleMixin'
 
+import '@mdi/font/css/materialdesignicons.css'
+
 Vue.use(VueCookies)
 
 Vue.mixin(titleMixin)
@@ -19,6 +21,7 @@ new Vue({
   el: "#app",
   router,
   store,
+
   vuetify,
   components: { App },
   template: "<App/>"

@@ -9,7 +9,6 @@ import UserDashboard from "@/components/UserDashboard"
 import CreateTeam from "@/components/CreateTeam"
 import AssignSupervisor from "@/components/AssignSupervisor"
 import UpdateTeam from "@/components/UpdateTeam"
-import test from "@/components/test"
 import Supervisor from "@/components/supervisor/Supervisor"
 import Report from "@/components/report/Report"
 
@@ -67,11 +66,6 @@ export default new Router({
       path: "/updateteam",
       name: "UpdateTeam",
       component: UpdateTeam
-    },
-    {
-      path: "/test",
-      name: "test",
-      component: test
     },
     {
       path: "/supervisor",
