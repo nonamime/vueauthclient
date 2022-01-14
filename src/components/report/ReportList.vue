@@ -1,5 +1,40 @@
 <template>
-  <v-card class="pa-4">
+  <v-card flat class="pa-4">
+    <v-dialog
+      ref="dateMenu"
+      v-model="reportDateMenuDialog"
+      :return-value.sync="reportDate"
+      width="290px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-text-field
+          v-model="reportDate"
+          label="Select date"
+          readonly
+          v-bind="attrs"
+          v-on="on"
+          class="px-16"
+        ></v-text-field>
+      </template>
+
+      <v-date-picker v-model="reportDate" no-title scrollable>
+        <v-spacer></v-spacer>
+        <v-btn text color="primary" @click="reportDateMenuDialog = false">
+          Cancel
+        </v-btn>
+        <v-btn
+          text
+          color="primary"
+          @click="
+            $refs.dateMenu.save(reportDate);
+            loadWithNewDate();
+            reportDateMenuDialog = false;
+          "
+        >
+          OK
+        </v-btn>
+      </v-date-picker>
+    </v-dialog>
     <table id="customers">
       <!-- <tr>
         <th style="background-color: black" colspan="3">
@@ -32,6 +67,7 @@
       </tr>
       <br />
     </table>
+
     <v-btn class="button my-4">Print the entire page</v-btn>
   </v-card>
 </template>
@@ -42,28 +78,40 @@ export default {
   data() {
     return {
       sites: [],
+      reportDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10),
+      reportDateMenuDialog: false
     };
   },
+  computed: {},
+  watch: {
+    reportDate(reportDate) {
+      // console.log(reportDate);
+      // this.getUserData();
+    }
+  },
   methods: {
-    getUserData: function () {
+    loadWithNewDate() {
+      this.getUserData();
+    },
+    getUserData: function() {
       let self = this;
       axios
-        .get("/api/reportlist")
-        .then((response) => {
-          for (let i = 0; i < response.data.length; i++) {
-            self.sites.push(response.data[i]);
-          }
+        .post("/api/reportlist", { date: this.reportDate })
+        .then(({ data }) => {
+          self.sites = data;
         })
-        .catch((errors) => {
+        .catch(errors => {
           if ((errors = "Request failed with status code 401")) {
             console.log(errors);
           }
         });
-    },
+    }
   },
   mounted() {
     this.getUserData(); // router at here
-  },
+  }
 };
 </script>
 

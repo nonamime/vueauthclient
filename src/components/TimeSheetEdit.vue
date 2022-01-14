@@ -110,7 +110,7 @@
               <v-btn text color="primary" @click="modal3 = false">
                 Cancel
               </v-btn>
-              <v-btn text color="primary" @click="$refs.modal3.save(dateout)">
+              <v-btn text color="primary" @click="$refs.dialog3.save(dateout)">
                 OK
               </v-btn>
             </v-date-picker>
@@ -187,6 +187,7 @@ export default {
       remark: "",
       remarkFlag: false,
       valueHasChangedFlag: false,
+      insertNewValueFlag: false,
       afterApiCalled: false,
 
       oriValue: {
@@ -237,10 +238,19 @@ export default {
     },
     checkIfOriValueHasChanged() {
       for (const prop in this.oriValue) {
+        //from empty to have value
+        if (!this.oriValue[prop] && this.$data[prop]) {
+          this.insertNewValueFlag = true;
+        }
+
+        //from value to another value
         if (this.oriValue[prop] && this.oriValue[prop] != this.$data[prop]) {
           this.remarkFlag = true;
-          return;
         }
+      }
+
+      if (this.remarkFlag) {
+        return;
       }
 
       this.remarkFlag = false;
@@ -269,10 +279,10 @@ export default {
       if (this.remarkFlag && !this.remark) {
         this.remindToRemark();
         return;
-      } 
-      if (!this.remarkFlag) {
+      }
+      if (!this.remarkFlag && !this.insertNewValueFlag) {
         alert("No value has changed, edit and submit again.");
-        return; 
+        return;
       }
 
       axios

@@ -10,14 +10,14 @@
         <v-spacer cols="12"></v-spacer>
         <v-col sm="12" md="3">
           <v-btn
-            color="cust-secondary"
+            color="primary"
             @click="$router.push({ path: '/addtimesheet' })"
           >
             Create Worker Start time
           </v-btn>
         </v-col>
         <v-col sm="12" md="3">
-          <v-btn color="cust-secondary" @click="batchUpdateEndTime">
+          <v-btn color="primary" @click="batchUpdateEndTime">
             Batch add end time
           </v-btn>
         </v-col>
@@ -31,27 +31,48 @@
         :headers="timeSheetTableHeader"
         :items-per-page="15"
         class="ma-4"
-        mobile-breakpoint="800"
+        mobile-breakpoint="850"
+        calculate-widths
+        :item-class="itemRowBackground"
       >
         <template v-slot:[`item.option`]="{ item }">
-          <v-btn
-            :disabled="item.snooze"
-            class="ma-1"
-            color="cust-primary"
-            @click="editClick(item.id)"
-          >
-            Edit
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            color="cust-primary"
-            @click="deleteClick(item.id)"
-          >
-            Delete
-          </v-btn>
+          <template v-if="item.isSelectable">
+            <v-btn
+              :disabled="item.snooze"
+              class="ma-1"
+              color="primary"
+              @click="editClick(item.id)"
+            >
+              Edit
+            </v-btn>
+            <v-btn
+              class="ma-1"
+              color="red accent-2"
+              @click="(deleteDialog = true), (deleteItemId = item.id)"
+            >
+              Delete
+            </v-btn>
+          </template>
         </template>
       </v-data-table>
     </v-sheet>
+    <!--  -->
+    <v-dialog v-model="deleteDialog">
+      <v-card min-height="400" min-width="400" class="pa-6">
+        <h1 class="mb-10">Remark for deletion</h1>
+        <v-text-field
+          outlined
+          v-model="deleteRemark"
+          label="Remark"
+        ></v-text-field>
+        <v-btn class="mr-2" color="red accent-2" @click="deleteClick()"
+          >Submit Delete</v-btn
+        >
+        <v-btn class="mr-2" color="amber darken-2" @click="clearDeleteDialog()"
+          >Cancel
+        </v-btn>
+      </v-card>
+    </v-dialog>
 
     <v-dialog v-model="batchEndTimeDialog" max-width="500px">
       <v-stepper v-model="currentStep">
@@ -163,17 +184,20 @@ export default {
       clockout: "",
       dateout: "",
       batchEndTimeDialog: false,
+      deleteDialog: false,
+      deleteRemark: "",
+      deleteItemId: "",
       selected: [],
       timeSheetData: [],
       timeSheetTableHeader: [
-        { text: "Site", value: "projectname" },
-        { text: "Team", value: "teamname" },
+        { text: "Site", value: "projectname", width: "10px" },
+        { text: "Team", value: "teamname", width: "20px" },
         { text: "Name", value: "employeename" },
-        { text: "Start Date", value: "datein" },
-        { text: "Start Time", value: "clockin" },
-        { text: "End Date", value: "dateout" },
-        { text: "End Time", value: "clockout" },
-        // { text: "Updated at", value: "updated_at" },
+        { text: "Start Date", value: "datein", width: "20px" },
+        { text: "Start Time", value: "clockin", width: "20px" },
+        { text: "End Date", value: "dateout", width: "20px" },
+        { text: "End Time", value: "clockout", width: "20px" },
+        { text: "Remark", value: "remark", width: "150px" },
         // { text: "Updated by", value: "updated_by" },
         // { text: "Created at", value: "created_at" },
         // { text: "Created by", value: "created_by" },
@@ -186,6 +210,9 @@ export default {
   },
   watch: {},
   methods: {
+    itemRowBackground(item) {
+      return item.isSelectable ? "" : "grey-bg";
+    },
     verifyStep() {
       if (!this.dateout) {
         this.currentStep = 1;
@@ -203,12 +230,33 @@ export default {
       this.currentStep = 1;
       this.batchEndTimeDialog = false;
     },
+    clearDeleteDialog() {
+      this.deleteDialog = false;
+      this.deleteItemId = "";
+      this.deleteRemark = "";
+    },
 
     editClick(id) {
       this.$router.push("/edittimesheet/" + id);
     },
-    deleteClick(id) {
-      // this.$router.go("/edittimesheet" + id);
+    deleteClick() {
+      if (!this.deleteRemark) {
+        alert("Please fill in remark to delete.");
+        return;
+      }
+      axios
+        .post("/api/deletetimesheet", {
+          id: this.deleteItemId,
+          remark: this.deleteRemark
+        })
+        .then(() => {
+          this.clearDeleteDialog();
+          this.getTimesheetList();
+          alert("Successfully delete timesheets.");
+        })
+        .catch(errors => {
+          console.log(errors);
+        });
     },
     batchUpdateEndTime() {
       if (this.selected.length < 1) {
@@ -229,7 +277,10 @@ export default {
       axios
         .get("/api/gettimesheetbysupervisor")
         .then(({ data }) => {
-          this.timeSheetData = data;
+          this.timeSheetData = data.map(x => ({
+            ...x,
+            isSelectable: !x.remark
+          }));
         })
         .catch(errors => {
           console.log(errors);
@@ -258,4 +309,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.grey-bg {
+  background-color: #bdbdbd;
+}
+</style>

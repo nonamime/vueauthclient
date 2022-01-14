@@ -50,13 +50,13 @@ import router from "../router";
 import { mapGetters } from "vuex";
 
 export default {
-  data: function () {
+  data: function() {
     return {
       role: null,
       sidebar: null,
       user: {
         username: "",
-        displayName: "",
+        displayName: ""
       },
       // menuItems: [],
       adminMenuItems: [
@@ -66,9 +66,12 @@ export default {
         { path: "/createteam", title: "New Team" },
         { path: "/assignsupervisor", title: "Set Team Supervisor" },
         { path: "/updateteam", title: "Edit Team" },
-        { path: "/report", name: "report", title: "Report" },
+        { path: "/report", name: "report", title: "Report" }
       ],
-      supervisorMenuItems: [{ path: "/timesheet", title: "Timesheet" }],
+      supervisorMenuItems: [
+        { path: "/timesheet", title: "Timesheet" },
+        { path: "/report", name: "report", title: "Report" }
+      ]
     };
   },
   computed: {
@@ -84,31 +87,30 @@ export default {
     },
     homeLink() {
       if (this.currentUser.role == "supervisor") {
-        return '/supervisor';
+        return "/supervisor";
       }
-      return '/dashboard';
-    },
+      return "/dashboard";
+    }
   },
   watch: {
-    currentUser() {},
+    currentUser() {}
   },
   methods: {
-    logout: function () {
+    logout: function() {
       let self = this;
       axios
         .get("/api/logout")
-        .then((response) => {
+        .then(response => {
           self.$set(this, "user", response.data.user);
           router.push("/");
         })
-        .catch((errors) => {
+        .catch(errors => {
           router.push("/");
         });
-    },
+    }
   },
-  mounted() {},
+  mounted() {}
 };
 </script>
 
-<style>
-</style> 
+<style></style>
