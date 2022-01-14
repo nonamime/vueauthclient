@@ -11,6 +11,8 @@ import AssignSupervisor from "@/components/AssignSupervisor"
 import UpdateTeam from "@/components/UpdateTeam"
 import Supervisor from "@/components/supervisor/Supervisor"
 import Report from "@/components/report/Report"
+import TimeSheet from "@/components/TimeSheet"
+import EditTimeSheet from "@/components/TimeSheetEdit"
 
 Vue.use(Router)
 
@@ -71,6 +73,21 @@ export default new Router({
       path: "/supervisor",
       name: "Supervisor",
       component: Supervisor
+    },
+    {
+      path: "/addtimesheet",
+      name: "AddTimeSheet",
+      component: Supervisor
+    },
+    {
+      path: "/edittimesheet/:id",
+      name: "EditTimeSheet",
+      component: EditTimeSheet
+    },
+    {
+      path: "/timesheet",
+      name: "TimeSheet",
+      component: TimeSheet
     },
     {
       path: "/report",

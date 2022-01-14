@@ -250,9 +250,7 @@ export default {
       datein: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
         .toISOString()
         .substr(0, 10),
-      dateout: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .substr(0, 10),
+      dateout: "",
       menu1: false,
       modal1: false,
       modal2: false,
@@ -276,7 +274,11 @@ export default {
       };
       axios
         .post("/api/insertworkertime", data)
-        .then((response) => {})
+        .then((response) => {
+
+          alert("Successfully added timesheet")
+          this.$router.push("/timesheet").catch(() => {});
+        })
         .catch((errors) => {
           //console.log("Cannot Update");
           console.log(errors);

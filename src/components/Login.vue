@@ -74,7 +74,7 @@ export default {
           await this.fetchCurrentUser();
           if (response.data.teamrole == 1) {
             //supervisor
-            return this.$router.push("/supervisor").catch(() => {});
+            return this.$router.push("/timesheet").catch(() => {});
           }
 
           this.$router.push("/dashboard").catch(() => {});
