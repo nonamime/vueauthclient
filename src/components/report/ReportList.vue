@@ -85,20 +85,15 @@ export default {
     };
   },
   computed: {},
-  watch: {
-    reportDate(reportDate) {
-      // console.log(reportDate);
-      // this.getUserData();
-    }
-  },
+  watch: {},
   methods: {
     loadWithNewDate() {
       this.getUserData();
     },
-    getUserData: function() {
+    getUserData: function(whatsapp = false) {
       let self = this;
       axios
-        .post("/api/reportlist", { date: this.reportDate })
+        .post("/api/reportlist", { date: this.reportDate, whatsapp: whatsapp})
         .then(({ data }) => {
           self.sites = data;
         })

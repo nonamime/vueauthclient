@@ -18,6 +18,7 @@
       <v-row>
         <v-col>
           <ReportList />
+          <whatsapp-report reportDate="2022-01-21" />
         </v-col>
       </v-row>
     </v-sheet>
@@ -26,11 +27,13 @@
 
 <script>
 import ReportList from "@/components/report/ReportList.vue";
+import WhatsappReport from './whatsappReport.vue';
 
 export default {
   name: "Report",
   components: {
-    ReportList
+    ReportList,
+    WhatsappReport
   },
   data() {
     return {};
